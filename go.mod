@@ -39,7 +39,11 @@ require (
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 )
 
-require github.com/gobuffalo/nulls v0.4.2 // indirect
+require (
+	github.com/gobuffalo/nulls v0.4.2 // indirect
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.653 // indirect
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.653 // indirect
+)
 
 require (
 	github.com/XSAM/otelsql v0.16.0

@@ -1,16 +1,21 @@
 package sms_provider
 
 import (
-	"encoding/json"
-	"errors"
+	// "encoding/json"
+	// "errors"
 	"fmt"
-	"net/http"
-	"net/url"
-	"strings"
+	// "net/http"
+	// "net/url"
+	// "strings"
 
 	"github.com/supabase/gotrue/internal/conf"
-	"github.com/supabase/gotrue/internal/utilities"
-	"golang.org/x/exp/utf8string"
+	// "github.com/supabase/gotrue/internal/utilities"
+	// "golang.org/x/exp/utf8string"
+
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
+	terrors "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
+	sms "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms/v20210111"
 )
 
 const (
@@ -55,45 +60,25 @@ func (t *VonageProvider) SendMessage(phone string, message string, channel strin
 
 // Send an SMS containing the OTP with Vonage's API
 func (t *VonageProvider) SendSms(phone string, message string) error {
-	body := url.Values{
-		"from":       {t.Config.From},
-		"to":         {phone},
-		"text":       {message},
-		"api_key":    {t.Config.ApiKey},
-		"api_secret": {t.Config.ApiSecret},
-	}
+	credential := common.NewCredential(
+		t.Config.ApiKey,
+		t.Config.ApiSecret,
+	)
+	cpf := profile.NewClientProfile()
+	cpf.HttpProfile.Endpoint = "sms.tencentcloudapi.com"
+	client, _ := sms.NewClient(credential, "ap-beijing", cpf)
 
-	isMessageContainUnicode := !utf8string.NewString(message).IsASCII()
-	if isMessageContainUnicode {
-		body.Set("type", "unicode")
-	}
+	request := sms.NewSendSmsRequest()
 
-	client := &http.Client{Timeout: defaultTimeout}
-	r, err := http.NewRequest("POST", t.APIPath, strings.NewReader(body.Encode()))
-	if err != nil {
-		return err
-	}
+	request.PhoneNumberSet = common.StringPtrs([]string{"+86" + phone})
+	request.SmsSdkAppId = common.StringPtr("1400817746")
+	request.SignName = common.StringPtr("寄云科技")
+	request.TemplateId = common.StringPtr("977982")
+	request.TemplateParamSet = common.StringPtrs([]string{message, "5"})
 
-	r.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	res, err := client.Do(r)
-	if err != nil {
-		return err
-	}
-	defer utilities.SafeClose(res.Body)
-
-	resp := &VonageResponse{}
-	derr := json.NewDecoder(res.Body).Decode(resp)
-	if derr != nil {
-		return derr
-	}
-
-	if len(resp.Messages) <= 0 {
-		return errors.New("vonage error: Internal Error")
-	}
-
-	// A status of zero indicates success; a non-zero value means something went wrong.
-	if resp.Messages[0].Status != "0" {
-		return fmt.Errorf("vonage error: %v (status: %v)", resp.Messages[0].ErrorText, resp.Messages[0].Status)
+	_, err := client.SendSms(request)
+	if _, ok := err.(*terrors.TencentCloudSDKError); ok {
+		return fmt.Errorf("An API error has returned: %s", err)
 	}
 
 	return nil

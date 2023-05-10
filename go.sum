@@ -843,6 +843,10 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.1 h1:w7B6lhMri9wdJUVmEZPGGhZzrYTPvgJArz7wNPgYKsk=
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69rRypqCw=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.653 h1:ZXFpQ4FZERMV4+PiPt3+A0Rhn1rLpq9bBJLB9m6DWx8=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.653/go.mod h1:7sCQWVkxcsR38nffDW057DRGk8mUjK1Ing/EFOK8s8Y=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.653 h1:YoI2mpxvCG/IYmPQxZQp+NcBIDTjTvmjBiU1gI2egjI=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.653/go.mod h1:BI0dbZyL1tVXE2Runpu7+/D6r/jFCRsPKk1LgOxs+Ag=
 github.com/tinylib/msgp v1.1.0 h1:9fQd+ICuRIu/ue4vxJZu6/LzxN0HwMds2nq/0cFvxHU=
 github.com/tinylib/msgp v1.1.0/go.mod h1:+d+yLhGm8mzTaHzB+wgMYrodPfmZrzkirds8fDWklFE=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20170815181823-89b8d40f7ca8/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
